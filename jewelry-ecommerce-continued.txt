@@ -1,0 +1,385 @@
+// File: components/Filters.jsx
+'use client';
+import { useState } from 'react';
+
+export default function Filters() {
+  const [expanded, setExpanded] = useState({
+    category: true,
+    price: true,
+    material: true
+  });
+  
+  const toggleSection = (section) => {
+    setExpanded({
+      ...expanded,
+      [section]: !expanded[section]
+    });
+  };
+  
+  return (
+    <div className="bg-gray-50 p-6 rounded sticky top-24">
+      <h2 className="text-xl font-bold mb-6">Filters</h2>
+      
+      {/* Category Filter */}
+      <div className="mb-6">
+        <button 
+          className="flex justify-between items-center w-full font-medium mb-3"
+          onClick={() => toggleSection('category')}
+        >
+          <span>Category</span>
+          <span>{expanded.category ? '−' : '+'}</span>
+        </button>
+        
+        {expanded.category && (
+          <div className="space-y-2">
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Necklaces</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Earrings</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Rings</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Bracelets</span>
+            </label>
+          </div>
+        )}
+      </div>
+      
+      {/* Price Filter */}
+      <div className="mb-6">
+        <button 
+          className="flex justify-between items-center w-full font-medium mb-3"
+          onClick={() => toggleSection('price')}
+        >
+          <span>Price</span>
+          <span>{expanded.price ? '−' : '+'}</span>
+        </button>
+        
+        {expanded.price && (
+          <div className="space-y-2">
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Under $100</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>$100 - $250</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>$250 - $500</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>$500+</span>
+            </label>
+          </div>
+        )}
+      </div>
+      
+      {/* Material Filter */}
+      <div className="mb-6">
+        <button 
+          className="flex justify-between items-center w-full font-medium mb-3"
+          onClick={() => toggleSection('material')}
+        >
+          <span>Material</span>
+          <span>{expanded.material ? '−' : '+'}</span>
+        </button>
+        
+        {expanded.material && (
+          <div className="space-y-2">
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Gold</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Silver</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Rose Gold</span>
+            </label>
+            <label className="flex items-center">
+              <input type="checkbox" className="mr-2" />
+              <span>Platinum</span>
+            </label>
+          </div>
+        )}
+      </div>
+      
+      <button className="w-full py-2 border border-black text-black rounded hover:bg-black hover:text-white transition">
+        Apply Filters
+      </button>
+    </div>
+  );
+}
+
+// File: components/AddToCartButton.jsx
+'use client';
+import { useState } from 'react';
+import { ShoppingBag } from 'lucide-react';
+
+export default function AddToCartButton({ productId }) {
+  const [quantity, setQuantity] = useState(1);
+  const [adding, setAdding] = useState(false);
+  
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  
+  const increaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+  
+  const addToCart = () => {
+    setAdding(true);
+    // Here you would normally add the item to cart state/context
+    setTimeout(() => {
+      setAdding(false);
+    }, 1000);
+  };
+  
+  return (
+    <div className="mb-8">
+      <div className="flex items-center mb-4">
+        <button 
+          onClick={decreaseQuantity}
+          className="w-10 h-10 border flex items-center justify-center hover:bg-gray-100"
+        >
+          −
+        </button>
+        <div className="w-12 text-center">{quantity}</div>
+        <button 
+          onClick={increaseQuantity}
+          className="w-10 h-10 border flex items-center justify-center hover:bg-gray-100"
+        >
+          +
+        </button>
+      </div>
+      
+      <button 
+        onClick={addToCart} 
+        disabled={adding}
+        className="w-full flex items-center justify-center bg-black text-white py-3 rounded hover:bg-gray-800 transition"
+      >
+        {adding ? (
+          'Adding...'
+        ) : (
+          <>
+            <ShoppingBag className="h-5 w-5 mr-2" />
+            Add to Cart
+          </>
+        )}
+      </button>
+    </div>
+  );
+}
+
+// File: components/ProductDetails.jsx
+'use client';
+import { useState } from 'react';
+
+export default function ProductDetails({ product }) {
+  const [activeTab, setActiveTab] = useState('description');
+  
+  return (
+    <div className="mt-8 border-t pt-8">
+      <div className="flex border-b">
+        <button 
+          className={`px-4 py-2 ${activeTab === 'description' ? 'border-b-2 border-black font-medium' : ''}`}
+          onClick={() => setActiveTab('description')}
+        >
+          Description
+        </button>
+        <button 
+          className={`px-4 py-2 ${activeTab === 'details' ? 'border-b-2 border-black font-medium' : ''}`}
+          onClick={() => setActiveTab('details')}
+        >
+          Details
+        </button>
+        <button 
+          className={`px-4 py-2 ${activeTab === 'shipping' ? 'border-b-2 border-black font-medium' : ''}`}
+          onClick={() => setActiveTab('shipping')}
+        >
+          Shipping & Returns
+        </button>
+      </div>
+      
+      <div className="py-4">
+        {activeTab === 'description' && (
+          <p>{product.description}</p>
+        )}
+        
+        {activeTab === 'details' && (
+          <ul className="list-disc pl-5 space-y-2">
+            {product.details.map((detail, index) => (
+              <li key={index}>{detail}</li>
+            ))}
+          </ul>
+        )}
+        
+        {activeTab === 'shipping' && (
+          <div>
+            <h4 className="font-medium mb-2">Shipping</h4>
+            <p className="mb-4">Free standard shipping on all orders over $100. Orders typically ship within 1-2 business days.</p>
+            
+            <h4 className="font-medium mb-2">Returns</h4>
+            <p>We accept returns within 30 days of delivery. Items must be in original condition with all packaging.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// File: components/RelatedProducts.jsx
+import Link from 'next/link';
+import Image from 'next/image';
+
+// This would normally be fetched based on the current product
+const relatedProducts = [
+  {
+    id: 5,
+    name: 'Pearl Drop Earrings',
+    price: 79.99,
+    image: '/api/placeholder/400/400',
+  },
+  {
+    id: 6,
+    name: 'Silver Bangle Set',
+    price: 119.99,
+    image: '/api/placeholder/400/400',
+  },
+  {
+    id: 7,
+    name: 'Sapphire Pendant',
+    price: 159.99,
+    image: '/api/placeholder/400/400',
+  },
+  {
+    id: 8,
+    name: 'Gold Wedding Band',
+    price: 399.99,
+    image: '/api/placeholder/400/400',
+  }
+];
+
+export default function RelatedProducts({ currentProductId }) {
+  // Filter out the current product
+  const filteredProducts = relatedProducts.filter(product => product.id.toString() !== currentProductId.toString());
+  
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {filteredProducts.slice(0, 4).map(product => (
+        <Link key={product.id} href={`/product/${product.id}`} className="group">
+          <div className="aspect-square relative mb-3 bg-gray-100 overflow-hidden">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover group-hover:scale-105 transition duration-300"
+            />
+          </div>
+          <h3 className="font-medium">{product.name}</h3>
+          <p className="text-gray-700">${product.price}</p>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+// File: components/CartItem.jsx
+'use client';
+import { useState } from 'react';
+import Image from 'next/image';
+import { X } from 'lucide-react';
+
+export default function CartItem({ item }) {
+  const [quantity, setQuantity] = useState(item.quantity);
+  
+  const handleQuantityChange = (e) => {
+    const newQuantity = parseInt(e.target.value);
+    if (newQuantity > 0) {
+      setQuantity(newQuantity);
+      // Here you would update the cart context/state
+    }
+  };
+  
+  const removeItem = () => {
+    // Here you would remove the item from cart context/state
+    console.log('Removing item:', item.id);
+  };
+  
+  return (
+    <div className="py-6 flex">
+      <div className="h-24 w-24 relative flex-shrink-0">
+        <Image
+          src={item.image}
+          alt={item.name}
+          fill
+          className="object-cover"
+        />
+      </div>
+      
+      <div className="ml-4 flex-grow">
+        <div className="flex justify-between mb-2">
+          <h3 className="font-medium">{item.name}</h3>
+          <button onClick={removeItem} className="text-gray-500 hover:text-black">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        
+        {Object.keys(item.options).length > 0 && (
+          <div className="text-sm text-gray-500 mb-2">
+            {Object.entries(item.options).map(([key, value]) => (
+              <div key={key}>{key}: {value}</div>
+            ))}
+          </div>
+        )}
+        
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex items-center">
+            <label htmlFor={`quantity-${item.id}`} className="sr-only">Quantity</label>
+            <select 
+              id={`quantity-${item.id}`}
+              value={quantity}
+              onChange={handleQuantityChange}
+              className="border rounded p-1"
+            >
+              {[...Array(10)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>{i + 1}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="font-medium">${(item.price * quantity).toFixed(2)}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// File: app/globals.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional custom styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-gray-900 bg-white;
+}
