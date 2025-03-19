@@ -4,11 +4,28 @@ import AddToCartButton from "@/app/_components/AddToCartButton";
 import ProductDetails from "@/app/_components/ProductDetails";
 import RelatedProducts from "@/app/_components/RelatedProducts";
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  details: string[];
+  images: string[];
+  options: {
+    chain: string[];
+  };
+}
+
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function ProductPage({ params }: PageProps) {
+  const resolvedParams = await params;
   // Normally we would fetch product data based on params.id
   // This is a static example
-  const product = {
-    id: params.id,
+  const product: Product = {
+    id: resolvedParams.id,
     name: "Crystal Pendant Necklace",
     price: 129.99,
     description:
